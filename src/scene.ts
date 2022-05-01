@@ -197,6 +197,45 @@ export default class Scene extends THREE.Scene {
                 return cube;
             }
 
+            const yellowRedBlue = (): Mesh => {
+                const cube =
+                    new CornerCubeCreator(0xff0000, 0xffff00, 0x0000ff).mesh;
+                cube.name = 'yellowRedBlue';
+                cube.position.set(1, -1, 1)
+                cube.rotateX(Math.PI)
+                cube.rotateY(Math.PI / 2)
+                return cube;
+            }
+
+            const yellowRedGreen = (): Mesh => {
+                const cube =
+                    new CornerCubeCreator(0x00ff00, 0xffff00, 0xff0000 ).mesh;
+                cube.name = 'yellowRedGreen';
+                cube.position.set(-1, -1, 1)
+                cube.rotateX(Math.PI)
+                cube.rotateY(Math.PI)
+                return cube;
+            }
+
+            const yellowGreenOrange = (): Mesh => {
+                const cube =
+                    new CornerCubeCreator(0xffff00, 0x00ff00 , 0xFFAE00).mesh;
+                cube.name = 'yellowGreenOrange';
+                cube.position.set(-1, -1, -1)
+                cube.rotateZ(Math.PI / 2)
+                cube.rotateY(Math.PI)
+                return cube;
+            }
+
+            const yellowBlueOrange = (): Mesh => {
+                const cube =
+                    new CornerCubeCreator(0x0000ff, 0xffff00, 0xFFAE00).mesh;
+                cube.name = 'yellowBlueOrange';
+                cube.position.set(1, -1, -1)
+                cube.rotateX(Math.PI)
+                cube.rotateY(Math.PI * 2)
+                return cube;
+            }
 
 
             cubes.push(
@@ -204,33 +243,48 @@ export default class Scene extends THREE.Scene {
                 core(),
 
                 // top row
-                // whiteCenter(),
-                // whiteBlueSide(),
-                // whiteRedSide(),
-                // whiteGreenSide(),
-                // whiteOrangeSide(),
-                // whiteBlueRedCorner(),
-                // whiteGreenRedCorner(),
-                // whiteGreenOrangeCorner(),
-                // whiteBlueOrangeCorner(),
+                whiteCenter(),
+                whiteBlueSide(),
+                whiteRedSide(),
+                whiteGreenSide(),
+                whiteOrangeSide(),
+                whiteBlueRedCorner(),
+                whiteGreenRedCorner(),
+                whiteGreenOrangeCorner(),
+                whiteBlueOrangeCorner(),
 
                 // middle row
-                // redCenter(),
-                // blueCenter(),
-                // greenCenter(),
-                // orangeCenter(),
-                // redBlueSide(),
-                // redGreenSide(),
-                // greenOrangeSide(),
-                // blueOrangeSide(),
+                redCenter(),
+                blueCenter(),
+                greenCenter(),
+                orangeCenter(),
+                redBlueSide(),
+                redGreenSide(),
+                greenOrangeSide(),
+                blueOrangeSide(),
 
                 // bottom row
                 yellowCenter(),
                 yellowRedSide(),
                 yellowBlueSide(),
                 yellowGreenSide(),
-                yellowOrangeSide()
+                yellowOrangeSide(),
+                yellowRedBlue(),
+                yellowRedGreen(),
+                yellowGreenOrange(),
+                yellowBlueOrange()
             )
+
+            const createEdges = () => {
+                cubes.forEach((mesh: Mesh) => {
+                    const edges = new THREE.EdgesGeometry(mesh.geometry)
+                    const edgeMesh = new THREE.LineSegments(edges,
+                        new THREE.LineBasicMaterial({color:0x000000, linewidth: 2}))
+                    edgeMesh.position.set(mesh.position.x, mesh.position.y, mesh.position.z)
+                    this.add(edgeMesh)
+                })
+            }
+            createEdges();
 
             const addCubesToScene = () => {
                 const addCubes = (mesh: Mesh) => {
@@ -248,7 +302,23 @@ export default class Scene extends THREE.Scene {
         }
         addAmbientLight();
 
-        console.log(this)
+        const dastan = () => {
+            const group = new THREE.Group();
+            group.add(this.getObjectByName('whiteCenter'));
+            group.add(this.getObjectByName('whiteBlueSide'));
+            group.add(this.getObjectByName('whiteRedSide'));
+            group.add(this.getObjectByName('whiteGreenSide'));
+            group.add(this.getObjectByName('whiteOrangeSide'));
+            group.add(this.getObjectByName('whiteBlueRedCorner'));
+            group.add(this.getObjectByName('whiteGreenRedCorner'));
+            group.add(this.getObjectByName('whiteGreenOrangeCorner'));
+            group.add(this.getObjectByName('whiteBlueOrangeCorner'));
+            this.add(group)
+            group.rotateY(-Math.PI / 2)
+            this.add(group.getObjectByName('whiteCenter'))
+            group.remove(group.getObjectByName('whiteCenter'))
+        }
+        dastan();
     }
 
     public update(): void {

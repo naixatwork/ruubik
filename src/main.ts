@@ -1,6 +1,11 @@
 import * as THREE from 'three'
 import Scene from "./scene";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import Stats from 'stats.js'
+
+const stats = new Stats()
+stats.showPanel(0)
+document.body.appendChild(stats.dom)
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -23,9 +28,11 @@ scene.initialize();
 
 function tick() {
     requestAnimationFrame(tick)
+    stats.begin();
     scene.update();
     controls.update();
     renderer.render(scene, camera)
+    stats.end();
 }
 
 tick();
